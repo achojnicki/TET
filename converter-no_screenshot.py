@@ -6,11 +6,11 @@ from sys import argv
 from tqdm import tqdm
 from random import randint
 
-FONT_SIZE=30
-FONT_NAME='comic_sans_ms.ttf'
+FONT_SIZE=50
+FONT_NAME='comic_sans_bold_ms.ttf'
 
-LETTER_WIDTH=30
-LETTER_HEIGHT=50
+LETTER_WIDTH=45
+LETTER_HEIGHT=70
 
 CACHE={}
 
