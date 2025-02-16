@@ -93,7 +93,7 @@ td {
 		self._data+="</div>"
 
 	def _convert_character(self, bitmap):
-		self._data+="""<table background="https://s3.gifyu.com/images/bSsZ9.gif">"""
+		self._data+="""<table style="float: left;border-spacing: 0px;" background="https://s3.gifyu.com/images/bSsZ9.gif">"""
 		for x in tqdm(range(0,LETTER_HEIGHT, 1)):
 			self._data+="<tr>"
 			for y in range(0,LETTER_WIDTH, 1):

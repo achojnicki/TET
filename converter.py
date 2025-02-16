@@ -9,7 +9,7 @@ from io import BytesIO
 FONT_SIZE=15
 FONT_NAME='comic_sans_ms.ttf'
 
-LETTER_WIDTH=10
+LETTER_WIDTH=15
 LETTER_HEIGHT=30
 
 CACHE={}
@@ -20,7 +20,7 @@ class converter:
 <body>
 <style>
 body {
-	display: block;
+	display: inline;
 	}
 table {
 	display: inline;
@@ -39,9 +39,8 @@ td {
 	padding: 0px;
 }
 
-#data {display: inline;}
 </style>
-<div id="data">
+<div style="display: inline">
 """		
 
 	def __init__(self):
@@ -93,7 +92,7 @@ td {
 				self._data+="<br>"
 
 	def _convert_character(self, bitmap):
-		self._data+="<table>"
+		self._data+="""<table style="float: left;border-spacing: 0px;">"""
 		for x in tqdm(range(0,LETTER_HEIGHT, 1)):
 			self._data+="<tr>"
 			for y in range(0,LETTER_WIDTH, 1):
