@@ -41,8 +41,8 @@ td {
 """
 
 	def __init__(self):
-		with open(argv[1],'r') as file:
-			self._input_data=file.read()
+		with open(argv[1],'rb') as file:
+			self._input_data=file.read().decode('utf-8')
 
 		self._font=ImageFont.truetype(FONT_NAME, FONT_SIZE)
 
@@ -93,7 +93,7 @@ td {
 		self._data+="</div>"
 
 	def _convert_character(self, bitmap):
-		self._data+="""<table style="float: left;border-spacing: 0px;" background="https://s3.gifyu.com/images/bSsZ9.gif">"""
+		self._data+="""<table style="float: left;border-spacing: 0px;" background="https://s3.gifyu.com/images/bSx8M.gif">"""
 		for x in tqdm(range(0,LETTER_HEIGHT, 1)):
 			self._data+="<tr>"
 			for y in range(0,LETTER_WIDTH, 1):
