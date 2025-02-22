@@ -6,24 +6,26 @@ from sys import argv
 from tqdm import tqdm
 from io import BytesIO
 
-FONT_SIZE=15
+FONT_SIZE=12
 FONT_NAME='comic_sans_ms.ttf'
 
-LETTER_WIDTH=15
-LETTER_HEIGHT=30
+LETTER_WIDTH=13
+LETTER_HEIGHT=18
 
-CACHE={}
+FONT_CACHE={}
+TABLE_CACHE={}
 
 class converter:
+	_temp=""
 	_data="""\
 <html>
 <body>
 <style>
 body {
-	display: inline;
+	display: inline-block;
 	}
 table {
-	display: inline;
+	display: inline-block;
 	margin: 0px;
 	padding: 0px;
 	border-spacing: 0px;
@@ -56,15 +58,15 @@ td {
 
 
 	def cod(self,col):
-		return f"""<td style="background-color: {col}"></td>"""
+		return f"""<td style="background:{col}"></td>"""
 
 
 	def col(self,r,g,b):
 		return '#%02x%02x%02x' % (r, g, b)
 
 	def _letter_to_bitmap(self, letter):
-		if letter in CACHE:
-			return CACHE[letter]
+		if letter in FONT_CACHE:
+			return FONT_CACHE[letter]
 		else:	
 			img=Image.new(
 				'RGB',
@@ -80,25 +82,32 @@ td {
 				fill=(0,0,0)
 				)
 			bitmap=np.array(img)
-			CACHE[letter]=bitmap
+			FONT_CACHE[letter]=bitmap
 			return bitmap
 
 	def _convert(self):
-		for letter in self._input_data:
+		for letter in tqdm(self._input_data):
 			if letter.isprintable():
-				bitmap=self._letter_to_bitmap(letter)
-				self._convert_character(bitmap)
+				if letter not in TABLE_CACHE:
+					bitmap=self._letter_to_bitmap(letter)
+					table=self._convert_character(bitmap)
+					TABLE_CACHE[letter]=table
+					self._data+=table
+				else:
+					self._data+=TABLE_CACHE[letter]
 			elif letter=="\n":
+				print('new line')
 				self._data+="<br>"
 
 	def _convert_character(self, bitmap):
-		self._data+="""<table style="float: left;border-spacing: 0px;">"""
-		for x in tqdm(range(0,LETTER_HEIGHT, 1)):
-			self._data+="<tr>"
+		self._temp="""<table>"""
+		for x in range(0,LETTER_HEIGHT, 1):
+			self._temp+="<tr>"
 			for y in range(0,LETTER_WIDTH, 1):
-					self._data+=self.cod(self.col(bitmap[x][y][0],bitmap[x][y][1],bitmap[x][y][2]))
-			self._data+="</tr>"
-		self._data+="</table>"
+				self._temp+=self.cod(self.col(bitmap[x][y][0],bitmap[x][y][1],bitmap[x][y][2]))
+			self._temp+="</tr>"
+		self._temp+="</table>"
+		return self._temp
 
 	def _save(self):
 		with open(self._output_file,'w') as f:
